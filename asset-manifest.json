@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/IRONINGBOY_IB/static/css/main.fbd42b9b.css",
-    "main.js": "/IRONINGBOY_IB/static/js/main.678e924a.js",
+    "main.css": "/IRONINGBOY_IB/static/css/main.b01792f2.css",
+    "main.js": "/IRONINGBOY_IB/static/js/main.e99b692b.js",
     "static/js/453.1821940b.chunk.js": "/IRONINGBOY_IB/static/js/453.1821940b.chunk.js",
     "static/media/img3.jpg": "/IRONINGBOY_IB/static/media/img3.cdaf5888a2cd146853f7.jpg",
     "static/media/img2.jpg": "/IRONINGBOY_IB/static/media/img2.91d687f7a024c908df92.jpg",
     "static/media/Bg1.jpg": "/IRONINGBOY_IB/static/media/Bg1.8eca9e10b2ca6e1109ba.jpg",
     "static/media/logo1.svg": "/IRONINGBOY_IB/static/media/logo1.6f13509c9d4ad11cb523c6d1a6db8148.svg",
     "index.html": "/IRONINGBOY_IB/index.html",
-    "main.fbd42b9b.css.map": "/IRONINGBOY_IB/static/css/main.fbd42b9b.css.map",
-    "main.678e924a.js.map": "/IRONINGBOY_IB/static/js/main.678e924a.js.map",
+    "main.b01792f2.css.map": "/IRONINGBOY_IB/static/css/main.b01792f2.css.map",
+    "main.e99b692b.js.map": "/IRONINGBOY_IB/static/js/main.e99b692b.js.map",
     "453.1821940b.chunk.js.map": "/IRONINGBOY_IB/static/js/453.1821940b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.fbd42b9b.css",
-    "static/js/main.678e924a.js"
+    "static/css/main.b01792f2.css",
+    "static/js/main.e99b692b.js"
   ]
 }
