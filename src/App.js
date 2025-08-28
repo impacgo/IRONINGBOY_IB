@@ -12,19 +12,7 @@ const Trail = () => {
   const [subtitleIndex, setSubtitleIndex] = useState(0);
   const [activeIndex, setActiveIndex] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
-
-  // Scroll visibility states
-  const [heroVisible, setHeroVisible] = useState(false);
-  const [faqVisible, setFaqVisible] = useState(false);
-  const [whyVisible, setWhyVisible] = useState(false);
-  const [contactVisible, setContactVisible] = useState(false);
-
-  // Refs for sections
   const featuresRef = useRef(null);
-  const heroRef = useRef(null);
-  const faqRef = useRef(null);
-  const whyRef = useRef(null);
-  const contactRef = useRef(null);
 
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
@@ -54,7 +42,6 @@ const Trail = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Observer for Services only
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -66,30 +53,6 @@ const Trail = () => {
       { threshold: 0.3 }
     );
     if (featuresRef.current) observer.observe(featuresRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  // Observer for all sections (hero, faq, why, contact)
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            if (entry.target.id === "home") setHeroVisible(true);
-            if (entry.target.id === "faqs") setFaqVisible(true);
-            if (entry.target.id === "whyus") setWhyVisible(true);
-            if (entry.target.id === "contact") setContactVisible(true);
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-
-    if (heroRef.current) observer.observe(heroRef.current);
-    if (faqRef.current) observer.observe(faqRef.current);
-    if (whyRef.current) observer.observe(whyRef.current);
-    if (contactRef.current) observer.observe(contactRef.current);
-
     return () => observer.disconnect();
   }, []);
 
@@ -108,7 +71,7 @@ const Trail = () => {
   };
 
   return (
-    <div className="laundry-website" style={{ overflow: "hidden" }}>
+    <div className="laundry-website" style={{overflow:"hidden"}}>
       {/* Navbar */}
       <nav className={`navbar ${isScrolled ? "navbar-scrolled" : ""}`}>
         <div className="nav-container">
@@ -130,9 +93,9 @@ const Trail = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className={`hero ${heroVisible ? "visible" : ""}`} id="home" ref={heroRef}>
+      <section className="hero" id="home">
         <div style={{
-          position: "absolute", top: 0, left: 0, width: "100%", height: "80%",
+          position: "absolute", top: 0, left: 0, width: "100%", height: "100%",
           backgroundImage: `url(${img1})`, backgroundPosition: "center", backgroundSize: "cover",
           filter: "blur(6px)", transform: "scale(1.05)", zIndex: 0
         }} />
@@ -158,7 +121,7 @@ const Trail = () => {
       </section>
 
       {/* Services Section */}
-      <section className={`features ${featuresVisible ? "visible" : ""}`} id="services" ref={featuresRef}>
+      <section className="features" id="services" ref={featuresRef}>
         <h2 className="section-title">Our Services</h2>
         <div className="feature-container">
           <div className={`feature ${featuresVisible ? "visible" : ""}`}>
@@ -180,7 +143,7 @@ const Trail = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className={`faq-section ${faqVisible ? "visible" : ""}`} id="faqs" ref={faqRef} style={{
+      <section className="faq-section" id="faqs" style={{
         backgroundImage: `url(${img2})`, backgroundSize: "cover", backgroundPosition: "center",
         minHeight: "100vh", padding: "4rem 1.5rem", color: "#fff", position: "relative"
       }}>
@@ -202,7 +165,9 @@ const Trail = () => {
       </section>
 
       {/* Why Choose Us Section */}
+      {/* Why Choose Us Section */}
       <div style={{ position: "relative", overflow: "hidden" }}>
+        {/* Blurred background image */}
         <div
           style={{
             backgroundImage: `url(${img2})`,
@@ -218,8 +183,9 @@ const Trail = () => {
             zIndex: 0,
           }}
         />
+        {/* Foreground content */}
         <div style={{ position: "relative", zIndex: 1 }}>
-          <section className={`why-us ${whyVisible ? "visible" : ""}`} id="whyus" ref={whyRef}>
+          <section className="why-us" id="whyus">
             <h2 className="section-title">Why Choose Us?</h2>
             <div className="why-horizontal">
               <div className="why-item">🌿 Eco-Friendly Cleaning</div>
@@ -231,89 +197,91 @@ const Trail = () => {
         </div>
       </div>
 
-      {/* Contact Section */}
-      <section className={`contact-section ${contactVisible ? "visible" : ""}`} id="contact" ref={contactRef} style={{
+      
+{/* Contact Section */}
+<section className="contact-section" id="contact" style={{
         backgroundImage: `url(${img3})`, backgroundSize: "cover", backgroundPosition: "center",
-        minHeight: "100vh", padding: "4rem 1.5rem", color: "#fff", position: "relative", width: "100%"
+        minHeight: "100vh", padding: "4rem 1.5rem", color: "#fff", position: "relative",width:"100%"
       }}>
-        <h2 className="section-title">Contact Us</h2>
-        <form className="contact-form" onSubmit={handleSubmit}>
-          <label htmlFor="name">Name</label>
-          <input
-            required
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Your Name"
-          />
+  <h2 className="section-title">Contact Us</h2>
+  <form className="contact-form" onSubmit={handleSubmit}>
+    <label htmlFor="name">Name</label>
+    <input
+      required
+      type="text"
+      id="name"
+      name="name"
+      value={formData.name}
+      onChange={handleChange}
+      placeholder="Your Name"
+    />
 
-          <label htmlFor="email">Email</label>
-          <input
-            required
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Your Email"
-          />
+    <label htmlFor="email">Email</label>
+    <input
+      required
+      type="email"
+      id="email"
+      name="email"
+      value={formData.email}
+      onChange={handleChange}
+      placeholder="Your Email"
+    />
 
-          <label htmlFor="message">Message</label>
-          <textarea
-            required
-            id="message"
-            name="message"
-            rows="5"
-            value={formData.message}
-            onChange={handleChange}
-            placeholder="Write your message here"
-          />
+    <label htmlFor="message">Message</label>
+    <textarea
+      required
+      id="message"
+      name="message"
+      rows="5"
+      value={formData.message}
+      onChange={handleChange}
+      placeholder="Write your message here"
+    />
 
-          <button type="submit">Send Message</button>
-          {submitted && (
-            <p className="success-message">
-              Thank you! Your message has been sent.
-            </p>
-          )}
-        </form>
-      </section>
+    <button type="submit">Send Message</button>
+    {submitted && (
+      <p className="success-message">
+        Thank you! Your message has been sent.
+      </p>
+    )}
+  </form>
+</section>
+<footer className="site-footer">
+  <div className="footer-container">
+    <div className="footer-brand">
+      <span className="footer-logo">Ironing Boy</span>
+      <span>We Wash. We Iron. We Care.</span>
+    </div>
 
-      {/* Footer */}
-      <footer className="site-footer">
-        <div className="footer-container">
-          <div className="footer-brand">
-            <span className="footer-logo">Ironing Boy</span>
-            <span>We Wash. We Iron. We Care.</span>
-          </div>
+    <div className="footer-social">
+      <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+        <i className="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <i className="fab fa-instagram"></i>
+      </a>
+      <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+        <i className="fab fa-twitter"></i>
+      </a>
+      <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <i className="fab fa-linkedin-in"></i>
+      </a>
+    </div>
 
-          <div className="footer-social">
-            <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-              <i className="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-              <i className="fab fa-instagram"></i>
-            </a>
-            <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-              <i className="fab fa-twitter"></i>
-            </a>
-            <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-              <i className="fab fa-linkedin-in"></i>
-            </a>
-          </div>
+    <div className="footer-payments">
+      <span>We Accept:</span>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" />
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" />
+    </div>
+  </div>
 
-          <div className="footer-payments">
-            <span>We Accept:</span>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" />
-          </div>
-        </div>
+  <div className="footer-bottom">
+    <span>© {new Date().getFullYear()} Ironing Boy. All rights reserved.</span>
+  </div>
+</footer>
 
-        <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Ironing Boy. All rights reserved.</span>
-        </div>
-      </footer>
+
+
     </div>
   );
 };
