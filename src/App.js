@@ -5,7 +5,7 @@ import img1 from "../src/images/Bg1.jpg";
 import img2 from "../src/images/img2.jpg";
 import Logo from "../src/images/logo1.svg";
 import img3 from "../src/images/img3.jpg";
-
+ 
 const Trail = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [featuresVisible, setFeaturesVisible] = useState(false);
@@ -13,16 +13,25 @@ const Trail = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const featuresRef = useRef(null);
-
+ 
+  // Contact form states
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
-
+ 
+  // Detect mobile screen width
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+ 
   const subtitles = [
     "Fresh Clothes. Fresh Start.",
     "Hassle-Free Laundry.",
     "We Care for Every Fabric.",
   ];
-
+ 
   const faqs = [
     { question: "How do I schedule a laundry pickup?", answer: "You can schedule a pickup via our website or mobile app by selecting a convenient time slot." },
     { question: "What types of fabrics do you handle?", answer: "We care for all kinds of fabrics including delicate silks, cotton, wool, and synthetic blends." },
@@ -32,16 +41,13 @@ const Trail = () => {
     { question: "Can you handle delicate or specialty fabrics?", answer: "Yes! Our team is trained to handle delicate items like silk, wool, and lace, using fabric-safe processes." },
     { question: "Is my data and order information secure?", answer: "Yes. We use industry-standard encryption to keep your personal and payment information safe." },
   ];
-
-  const toggleFAQ = (index) => setActiveIndex(prev => (prev === index ? null : index));
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
+ 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
+ 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -55,43 +61,55 @@ const Trail = () => {
     if (featuresRef.current) observer.observe(featuresRef.current);
     return () => observer.disconnect();
   }, []);
-
+ 
   useEffect(() => {
     const interval = setInterval(() => {
       setSubtitleIndex((prev) => (prev + 1) % subtitles.length);
     }, 3000);
     return () => clearInterval(interval);
   }, [subtitles.length]);
-
+ 
+  const toggleFAQ = (index) => setActiveIndex(prev => (prev === index ? null : index));
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+ 
+  // Close menu when nav link clicked on mobile
+  const handleNavLinkClick = () => {
+    if (isMobile && isMenuOpen) setIsMenuOpen(false);
+  };
+ 
   const handleChange = (e) => setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Contact form submitted:", formData);
     setSubmitted(true);
   };
-
+ 
   return (
     <div className="laundry-website" style={{overflow:"hidden"}}>
       {/* Navbar */}
       <nav className={`navbar ${isScrolled ? "navbar-scrolled" : ""}`}>
         <div className="nav-container">
-          <div className="logo-container">
+          <div className="logo-container" style={{ display: "flex", alignItems: "center" }}>
             <div className="logo"><img src={Logo} alt="logo" /></div>
+            {isMobile && (
+              <span className="mobile-logo-text">Ironing Boy</span>
+            )}
           </div>
           <div className={`nav-menu ${isMenuOpen ? "active" : ""}`}>
-            <a href="#home" className="nav-link">Home</a>
-            <a href="#services" className="nav-link">Services</a>
-            <a href="#whyus" className="nav-link">Why Us</a>
-            <a href="#faqs" className="nav-link">FAQ's</a>
-            <a href="#login" className="nav-link">Login</a>
-            <a href="#contact" className="nav-link">Contact</a>
+            <a href="#home" className="nav-link" onClick={handleNavLinkClick}>Home</a>
+            <a href="#services" className="nav-link" onClick={handleNavLinkClick}>Services</a>
+            <a href="#whyus" className="nav-link" onClick={handleNavLinkClick}>Why Us</a>
+            <a href="#faqs" className="nav-link" onClick={handleNavLinkClick}>FAQ's</a>
+            <a href="#login" className="nav-link" onClick={handleNavLinkClick}>Login</a>
+            <a href="#contact" className="nav-link" onClick={handleNavLinkClick}>Contact</a>
           </div>
           <div className="menu-toggle" onClick={toggleMenu}>
             <span className="bar"></span><span className="bar"></span><span className="bar"></span>
           </div>
         </div>
       </nav>
-
+ 
+ 
       {/* Hero Section */}
       <section className="hero" id="home">
         <div style={{
@@ -119,29 +137,47 @@ const Trail = () => {
           </div>
         </div>
       </section>
-
+ 
       {/* Services Section */}
-      <section className="features" id="services" ref={featuresRef}>
+      <section className="services-section" id="services" ref={featuresRef}>
         <h2 className="section-title">Our Services</h2>
-        <div className="feature-container">
-          <div className={`feature ${featuresVisible ? "visible" : ""}`}>
-            <div className="feature-icon">🚚</div>
-            <h3 className="feature-title">Pickup & Delivery</h3>
-            <p className="feature-description">We collect and deliver your laundry—completely hassle-free.</p>
+ 
+        <div className={`services-grid ${featuresVisible ? "visible" : ""}`}>
+          <div className="service-card" style={{background:"linear-gradient(135deg, #E6F3FF 0%, #fff 100%)"}}>
+            <div className="service-icon">👔</div>
+            <h3>Cloth Clean & Iron</h3>
           </div>
-          <div className={`feature ${featuresVisible ? "visible" : ""}`}>
-            <div className="feature-icon">📅</div>
-            <h3 className="feature-title">Easy Online Booking</h3>
-            <p className="feature-description">Schedule pickups in just a few clicks from any device.</p>
+          <div className="service-card" style={{background:"linear-gradient(135deg, #FFF4E6 0%, #fff 100%)"}}>
+            <div className="service-icon">🧺</div>
+            <h3>Cloth Iron Only</h3>
           </div>
-          <div className={`feature ${featuresVisible ? "visible" : ""}`}>
-            <div className="feature-icon">📍</div>
-            <h3 className="feature-title">Live Order Tracking</h3>
-            <p className="feature-description">Stay updated in real-time from pickup to doorstep delivery.</p>
+          <div className="service-card" style={{background:"linear-gradient(135deg, #FDE6F3 0%, #fff 100%)"}}>
+            <div className="service-icon">🔥</div>
+            <h3>Cloth Dry Clean</h3>
+          </div>
+          <div className="service-card" style={{background:"linear-gradient(135deg, #F5E6FF 0%, #fff 100%)"}}>
+            <div className="service-icon">🧥</div>
+            <h3>Leather, Fur & Suede</h3>
+          </div>
+          <div className="service-card" style={{background:"linear-gradient(135deg, #E6FFF3 0%, #fff 100%)"}}>
+            <div className="service-icon">👟</div>
+            <h3>Footwear & Bags</h3>
+          </div>
+          <div className="service-card" style={{background:"linear-gradient(135deg, #FFFBE6 0%, #fff 100%)"}}>
+            <div className="service-icon">🛏️</div>
+            <h3>Bedding & Household</h3>
+          </div>
+          <div className="service-card" style={{background:"linear-gradient(135deg, #E6F7FF 0%, #fff 100%)"}}>
+            <div className="service-icon">🧵</div>
+            <h3>Repair & Alteration</h3>
+          </div>
+          <div className="service-card" style={{background:"linear-gradient(135deg, #FFE6F0 0%, #fff 100%)"}}>
+            <div className="service-icon">🧺</div>
+            <h3>Service Wash</h3>
           </div>
         </div>
       </section>
-
+ 
       {/* FAQ Section */}
       <section className="faq-section" id="faqs" style={{
         backgroundImage: `url(${img2})`, backgroundSize: "cover", backgroundPosition: "center",
@@ -163,8 +199,7 @@ const Trail = () => {
           </div>
         </div>
       </section>
-
-      {/* Why Choose Us Section */}
+ 
       {/* Why Choose Us Section */}
       <div style={{ position: "relative", overflow: "hidden" }}>
         {/* Blurred background image */}
@@ -196,94 +231,110 @@ const Trail = () => {
           </section>
         </div>
       </div>
-
-      
-{/* Contact Section */}
-<section className="contact-section" id="contact" style={{
-        backgroundImage: `url(${img3})`, backgroundSize: "cover", backgroundPosition: "center",
-        minHeight: "100vh", padding: "4rem 1.5rem", color: "#fff", position: "relative",width:"100%"
-      }}>
-  <h2 className="section-title">Contact Us</h2>
-  <form className="contact-form" onSubmit={handleSubmit}>
-    <label htmlFor="name">Name</label>
-    <input
-      required
-      type="text"
-      id="name"
-      name="name"
-      value={formData.name}
-      onChange={handleChange}
-      placeholder="Your Name"
-    />
-
-    <label htmlFor="email">Email</label>
-    <input
-      required
-      type="email"
-      id="email"
-      name="email"
-      value={formData.email}
-      onChange={handleChange}
-      placeholder="Your Email"
-    />
-
-    <label htmlFor="message">Message</label>
-    <textarea
-      required
-      id="message"
-      name="message"
-      rows="5"
-      value={formData.message}
-      onChange={handleChange}
-      placeholder="Write your message here"
-    />
-
-    <button type="submit">Send Message</button>
-    {submitted && (
-      <p className="success-message">
-        Thank you! Your message has been sent.
-      </p>
-    )}
-  </form>
-</section>
-<footer className="site-footer">
-  <div className="footer-container">
-    <div className="footer-brand">
-      <span className="footer-logo">Ironing Boy</span>
-      <span>We Wash. We Iron. We Care.</span>
-    </div>
-
-    <div className="footer-social">
-      <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-        <i className="fab fa-facebook-f"></i>
-      </a>
-      <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-        <i className="fab fa-instagram"></i>
-      </a>
-      <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-        <i className="fab fa-twitter"></i>
-      </a>
-      <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-        <i className="fab fa-linkedin-in"></i>
-      </a>
-    </div>
-
-    <div className="footer-payments">
-      <span>We Accept:</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" />
-      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" />
-    </div>
-  </div>
-
-  <div className="footer-bottom">
-    <span>© {new Date().getFullYear()} Ironing Boy. All rights reserved.</span>
-  </div>
-</footer>
-
-
-
+ 
+      {/* Contact Section */}
+      <section className="contact-section" id="contact" style={{ position: "relative", minHeight: "100vh", width: "100%", padding: "4rem 1.5rem", transform: "scale(1.05)", zIndex: 0 }}>
+       
+        {/* Blurred Background Layer */}
+        <div
+          className="contact-bg-blur"
+          style={{
+            backgroundImage: `url(${img3})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "blur(6px)",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+          }}
+        />
+       
+        {/* Content Layer */}
+        <div style={{ position: "relative", zIndex: 1, maxWidth: "600px", margin: "auto", color: "#fff" }}>
+          <h2 className="section-title">Contact Us</h2>
+          <form className="contact-form" onSubmit={handleSubmit}>
+            <label htmlFor="name">Name</label>
+            <input
+              required
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Your Name"
+            />
+            <label htmlFor="email">Email</label>
+            <input
+              required
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Your Email"
+            />
+            <label htmlFor="message">Message</label>
+            <textarea
+              required
+              id="message"
+              name="message"
+              rows="5"
+              value={formData.message}
+              onChange={handleChange}
+              placeholder="Write your message here"
+            />
+            <button type="submit">Send Message</button>
+            {submitted && (
+              <p className="success-message">
+                Thank you! Your message has been sent.
+              </p>
+            )}
+          </form>
+        </div>
+      </section>
+ 
+      {/* Footer */}
+      <footer className="site-footer">
+        <div className="footer-container">
+          <div className="footer-brand">
+            <span className="footer-logo">Ironing Boy</span>
+            <span>We Wash. We Iron. We Care.</span>
+          </div>
+ 
+          <div className="footer-social">
+            <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <i className="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <i className="fab fa-instagram"></i>
+            </a>
+            <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+              <i className="fab fa-twitter"></i>
+            </a>
+            <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <i className="fab fa-linkedin-in"></i>
+            </a>
+          </div>
+ 
+          <div className="footer-payments">
+            <span>We Accept:</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" />
+          </div>
+        </div>
+ 
+        <div className="footer-bottom">
+          <span>© {new Date().getFullYear()} Ironing Boy. All rights reserved.</span>
+        </div>
+      </footer>
+ 
     </div>
   );
 };
-
+ 
 export default Trail;
+ 
+ 
